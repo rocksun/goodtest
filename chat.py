@@ -1,7 +1,7 @@
 import streamlit as st
 import chromadb
 import os
-from embed import GeminiEmbeddingFunction
+from embed import em
 
 
 # def call_gemini(docs, user_question):
@@ -80,7 +80,7 @@ def main(dir):
 
 
     chroma_client = chromadb.PersistentClient(path=db_path)
-    db = chroma_client.get_collection(name="questions", embedding_function=GeminiEmbeddingFunction())
+    db = chroma_client.get_collection(name="questions", embedding_function=em)
 
 
     

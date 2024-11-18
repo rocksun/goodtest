@@ -4,12 +4,19 @@ from chromadb import Documents, EmbeddingFunction, Embeddings
 import google.generativeai as genai
 import chromadb
 from typing import List
+from chromadb.utils import embedding_functions
+# from FlagEmbedding import FlagModel
 
+# model = FlagModel('BAAI/bge-large-zh-v1.5', 
+#                   query_instruction_for_retrieval="为这个句子生成表示以用于检索相关文章：",
+#                   use_fp16=True)
+
+em = embedding_functions.SentenceTransformerEmbeddingFunction(model_name="BAAI/bge-large-zh-v1.5")
 class GeminiEmbeddingFunction(EmbeddingFunction):
     def __call__(self, input: Documents) -> Embeddings:
-        gemini_api_key = os.getenv("GEMINI_API_KEY")
+        gemini_api_key = os.getenv("GOOGLE_API_KEY")
         genai.configure(api_key=gemini_api_key)
-        model = "models/embedding-001"
+        model = "from langchain.embeddings import ModelScopeEmbeddings"
         title = "Custom query"
         return genai.embed_content(model=model, content=input, task_type="retrieval_document", title=title)["embedding"]
 
@@ -92,7 +99,7 @@ def save_qa_chunks_to_vector_store(docs, db_path):
     # Create a Chroma database with the given documents
     def create_chroma_db(documents: List[dict], path: str, name: str):
         chroma_client = chromadb.PersistentClient(path=path)
-        db = chroma_client.create_collection(name=name, embedding_function=GeminiEmbeddingFunction())
+        db = chroma_client.create_collection(name=name, embedding_function=em)
         for i, d in enumerate(documents):
             meta = {"source": d["source"]}
             print(d)
