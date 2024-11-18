@@ -99,11 +99,11 @@ def save_qa_chunks_to_vector_store(docs, db_path):
     # Create a Chroma database with the given documents
     def create_chroma_db(documents: List[dict], path: str, name: str):
         chroma_client = chromadb.PersistentClient(path=path)
-        db = chroma_client.create_collection(name=name, embedding_function=em)
+        db = chroma_client.get_or_create_collection(name=name, embedding_function=em)
         for i, d in enumerate(documents):
             meta = {"source": d["source"]}
             print(d)
-            db.add(documents=[d["page_content"]],metadatas=[meta],ids=[str(i)])
+            db.upsert(documents=[d["page_content"]],metadatas=[meta],ids=[str(i)])
         return db, name
 
     # Specify the path and collection name for Chroma database
