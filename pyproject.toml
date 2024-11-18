@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "goodtest"
+version = "0.1.0"
+description = ""
+authors = ["rocksun <daijun@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+google-generativeai = "^0.8.3"
+chromadb = "^0.5.18"
+streamlit = "^1.40.1"
+
+
+[[tool.poetry.source]]
+name = "tsinghua"
+url = "https://mirrors.aliyun.com/pypi/simple/"
+priority = "primary"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
